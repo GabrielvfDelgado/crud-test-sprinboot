@@ -1,5 +1,7 @@
 package com.gabrivfdelgado.crudtestsprinboot.Controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,10 +11,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.List;
 
-import com.gabrivfdelgado.crudtestsprinboot.repository.ContactRepository;
 import com.gabrivfdelgado.crudtestsprinboot.model.Contact;
+import com.gabrivfdelgado.crudtestsprinboot.repository.ContactRepository;
 
 @RestController
 @RequestMapping({ "/contacts" })
@@ -39,7 +40,8 @@ public class ContactController {
 
     @PostMapping
     public Contact create(@RequestBody Contact contact) {
-        return repository.save(contact);
+        repository.save(contact);
+        return contact;
     }
 
     @PutMapping(value = "/{id}")
@@ -59,8 +61,7 @@ public class ContactController {
     @DeleteMapping(path = { "/{id}" })
     public ResponseEntity<?> delete(@PathVariable long id) {
         return repository.findById(id)
-                .map(record -> 
-                {
+                .map(record -> {
                     repository.deleteById(id);
                     return ResponseEntity.ok().build();
                 })
